@@ -7,6 +7,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../cmake")
 
 find_package(SDL2 REQUIRED)
 
+# add_subdirectory(keymap)
+set(KEYMAP_SOURCES keymap/ui_keymap.cc keymap/keymap.cc keymap/ui_functors.cc)
+
 include_directories(
 	..
 	${SDL2_INCLUDE_DIRS}
@@ -17,7 +20,7 @@ add_definitions(-DOPENBW_NO_SDL_MIXER)
 
 add_definitions(-DOPENBW_ENABLE_UI)
 
-add_library(openbw_ui ./sdl2.cpp)
+add_library(openbw_ui ./sdl2.cpp ${KEYMAP_SOURCES})
 
 target_link_libraries(openbw_ui ${SDL2_LIBRARIES})
 

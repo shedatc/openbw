@@ -6,6 +6,8 @@
 #include "native_window_drawing.h"
 #include "native_sound.h"
 
+#include "keymap/ui_keymap.hh"
+
 namespace bwgame {
 
 struct vr4_entry {
@@ -569,8 +571,11 @@ struct ui_functions: ui_util_functions {
 	replay_state current_replay_state;
 	action_state current_action_state;
 	std::array<apm_t, 12> apm;
-	ui_functions(game_player player) : ui_util_functions(player.st(), current_action_state, current_replay_state), player(std::move(player)) {
-	}
+
+	ui_keymap km;
+
+ ui_functions(game_player player) : ui_util_functions(player.st(), current_action_state, current_replay_state), player(std::move(player)), km(*this) {
+    }
 
 	std::function<void(a_vector<uint8_t>&, a_string)> load_data_file;
 
