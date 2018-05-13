@@ -1,5 +1,4 @@
-#ifndef FUNCTOR_HH
-#define FUNCTOR_HH
+#pragma once
 
 namespace bwgame {
 
@@ -8,5 +7,3 @@ namespace bwgame {
   };
 
 }
-
-#endif // FUNCTOR_HH

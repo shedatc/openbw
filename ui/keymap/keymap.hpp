@@ -1,9 +1,8 @@
-#ifndef KEYMAP_HH
-#define KEYMAP_HH
+#pragma once
 
 #include <unordered_map>
 #include <string>
-#include "functor.hh"
+#include "functor.hpp"
 
 namespace bwgame {
 
@@ -11,8 +10,8 @@ namespace bwgame {
     public:
 
         // Modifiers:
-        void add(std::string funcname, functor& func);
-        void bind(int keysym, std::string funcname);
+        void add(functor& func, std::string funcname);
+        void bind(int keysym,   std::string funcname);
 
         // Lookup:
         functor* lookup(int keysym);
@@ -27,5 +26,3 @@ namespace bwgame {
     };
 
 }
-
-#endif // KEYMAP_HH

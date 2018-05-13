@@ -1,8 +1,10 @@
-#include "keymap.hh"
+#include "keymap.hpp"
+
+#include <iostream>
 
 using namespace bwgame;
 
-void keymap::add(std::string funcname, functor& func) {
+void keymap::add(functor& func, std::string funcname) {
   names.insert({funcname, func}); // FIXME Should insert_or_assign here.
 }
 
@@ -26,7 +28,7 @@ bool keymap::press(int keysym) {
   functor* func = lookup(keysym);
 
   if (!func)
-    return false;
+    return false; // Unbound key pressed.
 
   (*func)();
   return true;

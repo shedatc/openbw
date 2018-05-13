@@ -1,9 +1,7 @@
-#ifndef UI_KEYMAP_H
-#define UI_KEYMAP_H
+#pragma once
 
-#include "keymap.hh"
-// #include "ui.h"
-#include "ui_functors.hh"
+#include "keymap.hpp"
+#include "ui_functors.hpp"
 
 namespace bwgame {
 
@@ -15,10 +13,9 @@ namespace bwgame {
     ui_keymap(ui_functions& ui);
 
   private:
-    quit_ui_functor quit;
+    quit_ui_functor  quit;
+    pause_ui_functor pause;
 
   };
 
 }
-
-#endif // UI_KEYMAP_H

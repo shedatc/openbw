@@ -6,7 +6,7 @@
 #include "native_window_drawing.h"
 #include "native_sound.h"
 
-#include "keymap/ui_keymap.hh"
+#include "keymap/ui_keymap.hpp"
 
 namespace bwgame {
 
@@ -574,7 +574,10 @@ struct ui_functions: ui_util_functions {
 
 	ui_keymap km;
 
- ui_functions(game_player player) : ui_util_functions(player.st(), current_action_state, current_replay_state), player(std::move(player)), km(*this) {
+	ui_functions(game_player player)
+		: ui_util_functions(player.st() , current_action_state , current_replay_state)
+		, player(std::move(player))
+		, km(*this) {
     }
 
 	std::function<void(a_vector<uint8_t>&, a_string)> load_data_file;
@@ -1860,16 +1863,10 @@ struct ui_functions: ui_util_functions {
 					}
 					break;
 				case native_window::event_t::type_key_down:
-					if (e.sym == 'q' || e.sym == '\e') {
-						// use_new_images = !use_new_images;
-						if (exit_on_close) std::exit(0);
-						else               window_closed = true;
-						break;
-					}
+                    if ( km.press(e.sym) )
+                        break;
+
 #ifndef EMSCRIPTEN
-					if (e.sym == ' ' || e.sym == 'p') {
-						is_paused = !is_paused;
-					}
 					if (e.sym == 'a' || e.sym == 'u') {
 						if (game_speed < fp8::integer(128)) game_speed *= 2;
 					}
@@ -2063,4 +2060,3 @@ struct ui_functions: ui_util_functions {
 };
 
 }
-

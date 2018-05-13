@@ -1,7 +1,6 @@
-#ifndef UI_FUNCTORS_HH
-#define UI_FUNCTORS_HH
+#pragma once
 
-#include "functor.hh"
+#include "functor.hpp"
 
 namespace bwgame {
 
@@ -19,10 +18,20 @@ namespace bwgame {
 
   struct quit_ui_functor : public ui_functor {
 
+    // Constructors:
+    quit_ui_functor(ui_functions& ui);
+
+    void operator()();
+
+  };
+
+  struct pause_ui_functor : public ui_functor {
+
+    // Constructors:
+    pause_ui_functor(ui_functions& ui);
+
     void operator()();
 
   };
 
 }
-
-#endif // UI_FUNCTORS_HH

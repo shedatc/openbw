@@ -13,45 +13,75 @@
 
 using namespace bwgame;
 
-struct quit_functor : functor {
+struct state {
+
+  int seqnum = 0;
+
+};
+
+struct stateful_functor : public functor {
+
+  stateful_functor(state& st) : st(st) {
+  }
+
+protected:
+
+  state st;
+
+};
+
+struct quit_functor : public stateful_functor {
+
+  quit_functor(state& st) : stateful_functor(st) {
+  }
+
   void operator()() {
     std::cerr << "quit" << std::endl;
   }
+
 };
 
-struct pause_functor : functor {
+struct pause_functor : public stateful_functor {
+
+  pause_functor(state& st) : stateful_functor(st) {
+  }
+
   void operator()() {
     std::cerr << "pause" << std::endl;
   }
+
 };
 
 int main() {
-	quit_functor  quit;
-    pause_functor pause;
-    keymap        km;
+  state st;
+  st.seqnum = 21;
 
-    km.add("quit",  quit);
-    km.add("pause", pause);
-    km.bind('q', "quit");
-    km.bind('p', "pause");
-    // 'x' is unbound.
+  quit_functor  quit(st);
+  pause_functor pause(st);
+  keymap        km;
 
-    functor* func = nullptr;
+  km.add("quit",  quit);
+  km.add("pause", pause);
+  km.bind('q', "quit");
+  km.bind('p', "pause");
+  // 'x' is unbound.
 
-    func = km.lookup('x');
-    if (func)
-      (*func)();
-    func = km.lookup('q');
-    if (func)
-      (*func)();
-    func = km.lookup('p');
-    if (func)
-      (*func)();
+  functor* func = nullptr;
 
-    km.press('x'); // noop
-    km.press('q');
-    km.press('p');
+  func = km.lookup('x');
+  if (func)
+    (*func)();
+  func = km.lookup('q');
+  if (func)
+    (*func)();
+  func = km.lookup('p');
+  if (func)
+    (*func)();
 
-    km.at("quit")();
-	return 0;
+  km.press('x'); // noop
+  km.press('q');
+  km.press('p');
+
+  km.at("quit")();
+  return 0;
 }

@@ -7,8 +7,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../cmake")
 
 find_package(SDL2 REQUIRED)
 
-# add_subdirectory(keymap)
-set(KEYMAP_SOURCES keymap/ui_keymap.cc keymap/keymap.cc keymap/ui_functors.cc)
+set(KEYMAP_SOURCES keymap/ui_keymap.cpp keymap/keymap.cpp keymap/ui_functors.cpp)
 
 include_directories(
 	..
