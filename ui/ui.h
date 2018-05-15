@@ -6,7 +6,8 @@
 #include "native_window_drawing.h"
 #include "native_sound.h"
 
-#include "keymap/ui_keymap.hpp"
+#include "keymap/keymap.hpp"
+#include "keymap/ui_functors.hpp"
 
 namespace bwgame {
 
@@ -572,12 +573,23 @@ struct ui_functions: ui_util_functions {
 	action_state current_action_state;
 	std::array<apm_t, 12> apm;
 
-	ui_keymap km;
+	keymap km;
 
 	ui_functions(game_player player)
 		: ui_util_functions(player.st() , current_action_state , current_replay_state)
-		, player(std::move(player))
-		, km(*this) {
+		, player(std::move(player)) {
+
+		// quit
+		quit_ui_functor quit(*this);
+		km.add(quit,  "quit");
+		km.bind('q',  "quit");
+		km.bind('\e', "quit");
+
+		// pause
+		pause_ui_functor pause(*this);
+		km.add(pause, "pause");
+		km.bind('p',  "pause");
+		km.bind(' ',  "pause");
     }
 
 	std::function<void(a_vector<uint8_t>&, a_string)> load_data_file;
