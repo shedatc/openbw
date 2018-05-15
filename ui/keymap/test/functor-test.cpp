@@ -1,4 +1,4 @@
-// Run: g++ functor-test.cc && ./a.out
+// Run: g++ functor-test.cpp && ./a.out
 //
 // Expected Output:
 //   foo
@@ -7,7 +7,7 @@
 //   bar
 
 #include <iostream>
-#include "../functor.hh"
+#include "../functor.hpp"
 
 using namespace bwgame;
 

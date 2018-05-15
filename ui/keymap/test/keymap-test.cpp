@@ -1,4 +1,4 @@
-// Run: g++ keymap-test.cc ../keymap.cc && ./a.out
+// Run: g++ keymap-test.cpp ../keymap.cc && ./a.out
 //
 // Expected Output:
 //   quit
@@ -8,8 +8,8 @@
 //   quit
 
 #include <iostream>
-#include "../functor.hh"
-#include "../keymap.hh"
+#include "../functor.hpp"
+#include "../keymap.hpp"
 
 using namespace bwgame;
 
@@ -60,8 +60,8 @@ int main() {
   pause_functor pause(st);
   keymap        km;
 
-  km.add("quit",  quit);
-  km.add("pause", pause);
+  km.add(quit,  "quit");
+  km.add(pause, "pause");
   km.bind('q', "quit");
   km.bind('p', "pause");
   // 'x' is unbound.
