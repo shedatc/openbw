@@ -573,7 +573,7 @@ struct ui_functions: ui_util_functions {
 	action_state current_action_state;
 	std::array<apm_t, 12> apm;
 
-	keymap km;
+	keymap key;
 
 	ui_functions(game_player player)
 		: ui_util_functions(player.st() , current_action_state , current_replay_state)
@@ -581,15 +581,20 @@ struct ui_functions: ui_util_functions {
 
 		// quit
 		quit_ui_functor quit(*this);
-		km.add(quit,  "quit");
-		km.bind('q',  "quit");
-		km.bind('\e', "quit");
+		key.add(quit,  "quit");
+		key.bind('q',  "quit");
+		key.bind('\e', "quit");
 
 		// pause
 		pause_ui_functor pause(*this);
-		km.add(pause, "pause");
-		km.bind('p',  "pause");
-		km.bind(' ',  "pause");
+		key.add(pause, "pause");
+		key.bind('p',  "pause");
+		key.bind(' ',  "pause");
+
+		key.bind(81 /* DOWN */,  "move-screen-down");
+		key.bind(82 /* UP */,    "move-screen-up");
+		key.bind(79 /* RIGHT */, "move-screen-right");
+		key.bind(80 /* LEFT */,  "move-screen-left");
     }
 
 	std::function<void(a_vector<uint8_t>&, a_string)> load_data_file;
@@ -1819,8 +1824,8 @@ struct ui_functions: ui_util_functions {
 			is_drag_selecting = false;
 		};
 
+		native_window::event_t e;
 		if (wnd) {
-			native_window::event_t e;
 			while (wnd.peek_message(e)) {
 				switch (e.type) {
 				case native_window::event_t::type_quit:
@@ -1875,7 +1880,7 @@ struct ui_functions: ui_util_functions {
 					}
 					break;
 				case native_window::event_t::type_key_down:
-                    if ( km.press(e.sym) )
+                    if ( key.press(e.sym) )
                         break;
 
 #ifndef EMSCRIPTEN
@@ -1929,10 +1934,15 @@ struct ui_functions: ui_util_functions {
 				if (!is_drag_selecting) {
 					int scroll_speed = scroll_speeds[scroll_speed_n];
 					auto prev_screen_pos = screen_pos;
-					if (wnd.get_key_state(81)) screen_pos.y += scroll_speed;
-					else if (wnd.get_key_state(82)) screen_pos.y -= scroll_speed;
-					if (wnd.get_key_state(79)) screen_pos.x += scroll_speed;
-					else if (wnd.get_key_state(80)) screen_pos.x -= scroll_speed;
+					if (key.match(e.sym, "move-screen-down"))      screen_pos.y += scroll_speed;
+					else if (key.match(e.sym, "move-screen-up"))   screen_pos.y -= scroll_speed;
+					if (key.match(e.sym, "move-screen-right"))     screen_pos.x += scroll_speed;
+					else if (key.match(e.sym, "move-screen-left")) screen_pos.x -= scroll_speed;
+
+					/* if (wnd.get_key_state(81 /\* DOWN *\/ )) screen_pos.y += scroll_speed; */
+					/* else if (wnd.get_key_state(82 /\* UP *\/ )) screen_pos.y -= scroll_speed; */
+					/* if (wnd.get_key_state(79 /\* RIGHT *\/ )) screen_pos.x += scroll_speed; */
+					/* else if (wnd.get_key_state(80 /\* LEFT *\/ )) screen_pos.x -= scroll_speed; */
 					if (screen_pos != prev_screen_pos) {
 						if (scroll_speed_n != scroll_speeds.size() - 1) ++scroll_speed_n;
 					} else scroll_speed_n = 0;
