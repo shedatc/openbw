@@ -4,15 +4,16 @@
 
 using namespace bwgame;
 
-void keymap::add(functor& func, std::string funcname) {
-  name_functor_bindings.insert({funcname, func}); // FIXME Should insert_or_assign here.
+void keymap::bind_functor(functor& func, std::string funcname) {
+  name_functor_bindings.insert({ funcname, func }); // TODO Use insert_or_assign?
 }
 
-void keymap::bind(int keysym, std::string funcname) {
-  auto func = lookup_by_name(funcname);
-  if (func)
-    key_functor_bindings.insert({ keysym, *func });
-  key_name_bindings.insert({ keysym, funcname });        // FIXME Should insert_or_assign here.
+void keymap::bind_key(int keysym, std::string funcname) {
+  functor* func = lookup_by_name(funcname);
+  if (func != nullptr) {
+    key_functor_bindings.insert({  keysym, *func }); // TODO Use insert_or_assign?
+  }
+  key_name_bindings.insert({ keysym, funcname }); // TODO Use insert_or_assign?
 }
 
 functor* keymap::lookup_by_key(int keysym) {
@@ -31,10 +32,6 @@ functor* keymap::lookup_by_name(std::string funcname) {
     return nullptr;
 }
 
-functor& keymap::at(std::string funcname) {
-  return name_functor_bindings.at(funcname);
-}
-
 bool keymap::press(int keysym) {
   functor* func = lookup_by_key(keysym);
 
@@ -45,12 +42,12 @@ bool keymap::press(int keysym) {
   return true;
 }
 
-bool keymap::match(int keysym, std::string expected_funcname) {
+bool keymap::match(int keysym, const std::string expected_funcname) {
   auto funcname = key_name_bindings.find(keysym);
   if (funcname != key_name_bindings.end())
-    return false;     // Unbound key.
-  else if (funcname->second == expected_funcname)
+    return false;                                       // Unbound key.
+  else if (funcname->second == expected_funcname) // FIXME SEGV
     return true;
   else
-    return false;     // Key bound but not to the expected name.
+    return false;                                       // Key bound but not to the expected name.
 }

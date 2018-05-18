@@ -581,20 +581,20 @@ struct ui_functions: ui_util_functions {
 
 		// quit
 		quit_ui_functor quit(*this);
-		key.add(quit,  "quit");
-		key.bind('q',  "quit");
-		key.bind('\e', "quit");
+		key.bind_functor(quit,  "quit");
+		key.bind_key('q',       "quit");
+		key.bind_key('\e',      "quit");
 
 		// pause
 		pause_ui_functor pause(*this);
-		key.add(pause, "pause");
-		key.bind('p',  "pause");
-		key.bind(' ',  "pause");
+		key.bind_functor(pause, "pause");
+		key.bind_key('p',       "pause");
+		key.bind_key(' ',       "pause");
 
-		key.bind(81 /* DOWN */,  "move-screen-down");
-		key.bind(82 /* UP */,    "move-screen-up");
-		key.bind(79 /* RIGHT */, "move-screen-right");
-		key.bind(80 /* LEFT */,  "move-screen-left");
+		key.bind_key(81 /* DOWN */,  "move-screen-down");
+		key.bind_key(82 /* UP */,    "move-screen-up");
+		key.bind_key(79 /* RIGHT */, "move-screen-right");
+		key.bind_key(80 /* LEFT */,  "move-screen-left");
     }
 
 	std::function<void(a_vector<uint8_t>&, a_string)> load_data_file;
